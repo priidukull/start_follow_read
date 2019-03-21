@@ -193,7 +193,7 @@ def training_step(config):
             loss.backward()
             optimizer.step()
 
-            sum_loss += loss.data[0]
+            sum_loss += loss.data.item()
             steps += 1
 
 

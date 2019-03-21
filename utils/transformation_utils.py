@@ -151,13 +151,13 @@ def get_init_matrix(input):
 
     cosines = torch.cos(angles)
     sinuses = torch.sin(angles)
-    output[:,0,0] =  cosines * scaler
-    output[:,1,1] =  cosines * scaler
-    output[:,1,0] = -sinuses * scaler
-    output[:,0,1] =  sinuses * scaler
+    output[:,0,0] =  (cosines * scaler)[0]
+    output[:,1,1] =  (cosines * scaler)[0]
+    output[:,1,0] = (-sinuses * scaler)[0]
+    output[:,0,1] =  (sinuses * scaler)[0]
 
-    output[:,0,2] = x
-    output[:,1,2] = y
+    output[:,0,2] = x[0]
+    output[:,1,2] = y[0]
 
     return output
 
@@ -173,13 +173,13 @@ def get_step_matrix(input):
 
     cosines = torch.cos(angles)
     sinuses = torch.sin(angles)
-    output[:,0,0] =  cosines
-    output[:,1,1] =  cosines
-    output[:,1,0] = -sinuses
-    output[:,0,1] =  sinuses
+    output[:,0,0] =  cosines[0]
+    output[:,1,1] =  cosines[0]
+    output[:,1,0] = -sinuses[0]
+    output[:,0,1] =  sinuses[0]
 
-    output[:,0,2] = x
-    output[:,1,2] = y
+    output[:,0,2] = x[0]
+    output[:,1,2] = y[0]
 
     return output
 

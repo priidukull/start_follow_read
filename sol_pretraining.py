@@ -91,7 +91,7 @@ for epoch in xrange(1000):
         loss.backward()
         optimizer.step()
 
-        sum_loss += loss.data[0]
+        sum_loss += loss.item()
         steps += 1
 
     print "Train Loss", sum_loss/steps
@@ -116,7 +116,7 @@ for epoch in xrange(1000):
         #org_img = drawing.draw_sol_torch(predictions, org_img)
         # cv2.imwrite("data/sol_val_2/{}.png".format(step_i), org_img)
 
-        sum_loss += loss.data[0]
+        sum_loss += loss.item()
         steps += 1
 
     cnt_since_last_improvement += 1

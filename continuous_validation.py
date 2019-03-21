@@ -82,6 +82,8 @@ def alignment_step(config, dataset_lookup=None, model_mode='best_validation', pe
     for x in dataloader:
         sys.stdout.flush()
         a+=1
+        print "a=", a
+        print x[0]['img_key']
 
         if a%100 == 0:
             print a, np.mean(aligned_results)
@@ -101,10 +103,14 @@ def alignment_step(config, dataset_lookup=None, model_mode='best_validation', pe
         gt_lines = x['gt_lines']
         gt = "\n".join(gt_lines)
 
-        out_original = e2e(x)
-        if out_original is None:
-            #TODO: not a good way to handle this, but fine for now
-            print "Possible Error: Skipping alignment on image"
+        try:
+            out_original = e2e(x)
+            if out_original is None:
+                #TODO: not a good way to handle this, but fine for now
+                print "Possible Error: Skipping alignment on image"
+                continue
+        except:
+            print 'Possible Error: Out of memory. Skipping'
             continue
 
         out_original = e2e_postprocessing.results_to_numpy(out_original)

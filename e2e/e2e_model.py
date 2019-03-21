@@ -37,11 +37,12 @@ class E2EModel(nn.Module):
         self.hw.eval()
 
     def forward(self, x, use_full_img=True, accpet_threshold=0.1, volatile=True, gt_lines=None, idx_to_char=None):
-
-        sol_img = Variable(x['resized_img'].type(self.dtype), requires_grad=False, volatile=volatile)
+        with torch.no_grad():
+            sol_img = Variable(x['resized_img'].type(self.dtype), requires_grad=False)
 
         if use_full_img:
-            img = Variable(x['full_img'].type(self.dtype), requires_grad=False, volatile=volatile)
+            with torch.no_grad():
+                img = Variable(x['full_img'].type(self.dtype), requires_grad=False)
             scale = x['resize_scale']
             results_scale = 1.0
         else:
@@ -55,7 +56,7 @@ class E2EModel(nn.Module):
 
         #Take at least one point
         sorted_start, sorted_indices = torch.sort(start[...,0:1], dim=1, descending=True)
-        min_threshold = sorted_start[0,1,0].data.cpu()[0]
+        min_threshold = sorted_start[0,1,0].data.cpu().item()
         accpet_threshold = min(accpet_threshold, min_threshold)
 
         select = original_starts[...,0:1] >= accpet_threshold
@@ -98,7 +99,7 @@ class E2EModel(nn.Module):
             step_size = 5
             extra_bw = 1
             forward_steps = 40
-            
+
             grid_line, _, out_positions, xy_positions = self.lf(expand_img, sub_positions, steps=step_size)
             grid_line, _, out_positions, xy_positions = self.lf(expand_img, [out_positions[step_size]], steps=step_size+extra_bw, negate_lw=True)
             grid_line, _, out_positions, xy_positions = self.lf(expand_img, [out_positions[step_size+extra_bw]], steps=forward_steps, allow_end_early=True)

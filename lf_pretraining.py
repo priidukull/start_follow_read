@@ -78,7 +78,7 @@ for epoch in xrange(1000):
         loss.backward()
         optimizer.step()
 
-        sum_loss += loss.data[0]
+        sum_loss += loss.item()
         steps += 1
 
     print "Train Loss", sum_loss/steps
@@ -105,7 +105,7 @@ for epoch in xrange(1000):
 
         loss = lf_loss.point_loss(xy_output, xy_positions)
 
-        sum_loss += loss.data[0]
+        sum_loss += loss.item()
         steps += 1
 
     cnt_since_last_improvement += 1
